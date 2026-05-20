@@ -2,8 +2,19 @@
 Skool -> Google Calendar iCal Sync
 Genera un feed .ics publico desde el calendario de Skool (IA Masters Academy)
 Compatible con Google Calendar, Apple Calendar, Outlook.
+
+Uso:
+  Ejecutar directamente:      python generate_calendar.py
+  Con cookie de sesion:       SKOOL_COOKIE=<valor> python generate_calendar.py
+
+Para obtener tu cookie de sesion de Skool:
+  1. Abre Skool en el navegador y logueate
+  2. Abre DevTools (F12) -> Application -> Cookies -> skool.com
+  3. Copia el valor de la cookie 'next-auth.session-token'
+  4. Guardalo como secret SKOOL_COOKIE en GitHub Actions
 """
 
+import os
 import re
 import json
 import logging
@@ -21,28 +32,42 @@ MONTHS_BACK     = 1
 SKOOL_BASE_URL  = "https://www.skool.com"
 REQUEST_TIMEOUT = 20
 
+# Cookie de sesion de Skool (opcional, pero necesaria en entornos bloqueados)
+# Se lee de la variable de entorno SKOOL_COOKIE
+SKOOL_COOKIE = os.environ.get("SKOOL_COOKIE", "")
+
 logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 log = logging.getLogger(__name__)
 
-HEADERS = {
-    "User-Agent": (
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-        "AppleWebKit/537.36 (KHTML, like Gecko) "
-        "Chrome/124.0.0.0 Safari/537.36"
-    ),
-    "Accept": "text/html,application/xhtml+xml,application/json,*/*",
-    "Accept-Language": "es-ES,es;q=0.9,en;q=0.8",
-}
-
 # --- Utilidades HTTP ---------------------------------------------------------
 
+def make_headers(extra=None):
+    """Construye los headers HTTP, incluyendo cookie si esta disponible."""
+    headers = {
+        "User-Agent": (
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+            "AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/124.0.0.0 Safari/537.36"
+        ),
+        "Accept": "text/html,application/xhtml+xml,application/json,*/*",
+        "Accept-Language": "es-ES,es;q=0.9,en;q=0.8",
+        "Referer": f"{SKOOL_BASE_URL}/{GROUP_SLUG}/calendar",
+    }
+    if SKOOL_COOKIE:
+        headers["Cookie"] = SKOOL_COOKIE
+    if extra:
+        headers.update(extra)
+    return headers
+
 def fetch_text(url):
-    req = urllib.request.Request(url, headers=HEADERS)
+    req = urllib.request.Request(url, headers=make_headers())
     with urllib.request.urlopen(req, timeout=REQUEST_TIMEOUT) as resp:
         return resp.read().decode("utf-8")
 
 def fetch_json(url):
-    req = urllib.request.Request(url, headers={**HEADERS, "Accept": "application/json"})
+    req = urllib.request.Request(
+        url, headers=make_headers({"Accept": "application/json"})
+    )
     with urllib.request.urlopen(req, timeout=REQUEST_TIMEOUT) as resp:
         return json.loads(resp.read().decode("utf-8"))
 
@@ -63,13 +88,11 @@ def get_build_id():
         log.info(f"Buscando buildId en: {url}")
         try:
             html = fetch_text(url)
-            # Patron principal
             match = re.search(r'"buildId"\s*:\s*"([^"]+)"', html)
             if match:
                 build_id = match.group(1)
                 log.info(f"BuildId encontrado: {build_id}")
                 return build_id
-            # Patron alternativo en __NEXT_DATA__
             match2 = re.search(r'__NEXT_DATA__[^{]*({[^<]+})', html)
             if match2:
                 data = json.loads(match2.group(1))
@@ -83,8 +106,7 @@ def get_build_id():
 
     raise RuntimeError(
         "No se pudo obtener el buildId de Skool. "
-        "Es posible que Skool este bloqueando el acceso desde GitHub Actions. "
-        "Consulta el README para configurar una cookie de sesion."
+        "Asegurate de que SKOOL_COOKIE esta configurado correctamente."
     )
 
 # --- Obtener eventos del calendario ------------------------------------------
@@ -97,7 +119,8 @@ def get_events_for_timestamp(build_id, cal_date):
     )
     try:
         data = fetch_json(url)
-        return data.get("pageProps", {}).get("events", [])
+        events = data.get("pageProps", {}).get("events", [])
+        return events
     except urllib.error.HTTPError as e:
         log.warning(f"HTTP {e.code} para calDate={cal_date}: {e.reason}")
         return []
@@ -238,9 +261,11 @@ def generate_ical(events):
 # --- Main --------------------------------------------------------------------
 
 def main():
-    import os
-
     log.info(f"=== Skool Calendar Sync - {GROUP_SLUG} ===")
+    if SKOOL_COOKIE:
+        log.info("Cookie de sesion: configurada")
+    else:
+        log.warning("Cookie de sesion: NO configurada (puede fallar el acceso a la API)")
 
     build_id = get_build_id()
     events = get_all_events(build_id)
