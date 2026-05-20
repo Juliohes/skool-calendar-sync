@@ -24,6 +24,8 @@ jobs:
           python-version: "3.12"
 
       - name: Ejecutar script de sincronizacion
+        env:
+          SKOOL_COOKIE: ${{ secrets.SKOOL_COOKIE }}
         run: python generate_calendar.py
 
       - name: Commit y push si hay cambios
