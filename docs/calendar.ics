@@ -4,4 +4,440 @@ PRODID:-//SkoolCalSync//ia-masters-automations//EN
 X-WR-CALNAME:IA Masters Academy
 CALSCALE:GREGORIAN
 METHOD:PUBLISH
+BEGIN:VEVENT
+UID:ec79f4b85e7048da9929bd242d1a450d-1777309200@skool.ia-masters-automation
+ s
+DTSTAMP:20260520T192417Z
+DTSTART:20260427T170000Z
+DTEND:20260427T183000Z
+SUMMARY:☕️ Cafe Camaleónico
+DESCRIPTION:🗣️ Angel Aparicio\n🔥 El lunes que te hace avanzar. Cada
+  semana\, una hora para aprender\, compartir y aplicar IA real con otros q
+ ue están en el mismo camino.\n\nCódigo de acceso: 547852\nEnlace: https:
+ //us06web.zoom.us/j/88384837784?pwd=l7c6NV7Kh1wqFkGJiBVMRLWmjKynXG.1
+URL:https://www.skool.com/ia-masters-automations/calendar?eid=ec79f4b85e704
+ 8da9929bd242d1a450d
+LOCATION:https://us06web.zoom.us/j/88384837784?pwd=l7c6NV7Kh1wqFkGJiBVMRLWm
+ jKynXG.1
+END:VEVENT
+BEGIN:VEVENT
+UID:fe47ff78d3ee4f18a46dca7c1ac9a5af-1777395600@skool.ia-masters-automation
+ s
+DTSTAMP:20260520T192417Z
+DTSTART:20260428T170000Z
+DTEND:20260428T183000Z
+SUMMARY:🤝 Gestión de Negocios
+DESCRIPTION:🗣️ Alfonso Bello\n🔥 Gestión de negocio sin filtros. Co
+ n Alfonso: estrategia\, decisiones y operativa real para que tu negocio fu
+ ncione con o sin ti.\n\nCódigo: 562774\nEnlace: https://us06web.zoom.us/j
+ /88970065612?pwd=PdQvid4kXsUSMAOzbYnCd1T6dq153v.1
+URL:https://www.skool.com/ia-masters-automations/calendar?eid=fe47ff78d3ee4
+ f18a46dca7c1ac9a5af
+LOCATION:https://us06web.zoom.us/j/88970065612?pwd=PdQvid4kXsUSMAOzbYnCd1T6
+ dq153v.1
+END:VEVENT
+BEGIN:VEVENT
+UID:690b799f5d834453ba3f1ac358b5ba47-1777482000@skool.ia-masters-automation
+ s
+DTSTAMP:20260520T192417Z
+DTSTART:20260429T170000Z
+DTEND:20260429T183000Z
+SUMMARY:🦾 Forja de Camaleones
+DESCRIPTION:✅ Donde forjamos en grupo lo que cuesta construir solo.\n\n
+ 🗣️ Luis Salgado\n🔥 Desarrollos prácticos en directo\n\nCódigo de
+  acceso: 924755\nEnlace: https://us06web.zoom.us/j/84145991515?pwd=xv27zpA
+ Xfb5E1SdNLMr7q6B9mrq8op.1
+URL:https://www.skool.com/ia-masters-automations/calendar?eid=690b799f5d834
+ 453ba3f1ac358b5ba47
+LOCATION:https://us06web.zoom.us/j/84145991515?pwd=xv27zpAXfb5E1SdNLMr7q6B9
+ mrq8op.1
+END:VEVENT
+BEGIN:VEVENT
+UID:625c253dbcc3403396cecaac7976ce64-1777568400@skool.ia-masters-automation
+ s
+DTSTAMP:20260520T192417Z
+DTSTART:20260430T170000Z
+DTEND:20260430T190000Z
+SUMMARY:🎨 Taller de IA
+DESCRIPTION:✅ Construimos juntos\, paso a paso\, herramientas con IA que 
+ puedes aplicar desde el primer día. Sin código complicado y sin teoría 
+ de más.\n\n🗣️ Alejandro Romero\n🔓 Código: 292717\nEnlace: https:
+ //us06web.zoom.us/j/85358106562?pwd=6azhMcfYIX7L7KNynLmFfrQTOwm7In.1
+URL:https://www.skool.com/ia-masters-automations/calendar?eid=625c253dbcc34
+ 03396cecaac7976ce64
+LOCATION:https://us06web.zoom.us/j/85358106562?pwd=6azhMcfYIX7L7KNynLmFfrQT
+ Owm7In.1
+END:VEVENT
+BEGIN:VEVENT
+UID:ec79f4b85e7048da9929bd242d1a450d-1777914000@skool.ia-masters-automation
+ s
+DTSTAMP:20260520T192417Z
+DTSTART:20260504T170000Z
+DTEND:20260504T183000Z
+SUMMARY:☕️ Cafe Camaleónico
+DESCRIPTION:🗣️ Angel Aparicio\n🔥 El lunes que te hace avanzar. Cada
+  semana\, una hora para aprender\, compartir y aplicar IA real con otros q
+ ue están en el mismo camino.\n\nCódigo de acceso: 547852\nEnlace: https:
+ //us06web.zoom.us/j/88384837784?pwd=l7c6NV7Kh1wqFkGJiBVMRLWmjKynXG.1
+URL:https://www.skool.com/ia-masters-automations/calendar?eid=ec79f4b85e704
+ 8da9929bd242d1a450d
+LOCATION:https://us06web.zoom.us/j/88384837784?pwd=l7c6NV7Kh1wqFkGJiBVMRLWm
+ jKynXG.1
+END:VEVENT
+BEGIN:VEVENT
+UID:fe47ff78d3ee4f18a46dca7c1ac9a5af-1778000400@skool.ia-masters-automation
+ s
+DTSTAMP:20260520T192417Z
+DTSTART:20260505T170000Z
+DTEND:20260505T183000Z
+SUMMARY:🤝 Gestión de Negocios
+DESCRIPTION:🗣️ Alfonso Bello\n🔥 Gestión de negocio sin filtros. Co
+ n Alfonso: estrategia\, decisiones y operativa real para que tu negocio fu
+ ncione con o sin ti.\n\nCódigo: 562774\nEnlace: https://us06web.zoom.us/j
+ /88970065612?pwd=PdQvid4kXsUSMAOzbYnCd1T6dq153v.1
+URL:https://www.skool.com/ia-masters-automations/calendar?eid=fe47ff78d3ee4
+ f18a46dca7c1ac9a5af
+LOCATION:https://us06web.zoom.us/j/88970065612?pwd=PdQvid4kXsUSMAOzbYnCd1T6
+ dq153v.1
+END:VEVENT
+BEGIN:VEVENT
+UID:690b799f5d834453ba3f1ac358b5ba47-1778086800@skool.ia-masters-automation
+ s
+DTSTAMP:20260520T192417Z
+DTSTART:20260506T170000Z
+DTEND:20260506T183000Z
+SUMMARY:🦾 Forja de Camaleones
+DESCRIPTION:✅ Donde forjamos en grupo lo que cuesta construir solo.\n\n
+ 🗣️ Luis Salgado\n🔥 Desarrollos prácticos en directo\n\nCódigo de
+  acceso: 924755\nEnlace: https://us06web.zoom.us/j/84145991515?pwd=xv27zpA
+ Xfb5E1SdNLMr7q6B9mrq8op.1
+URL:https://www.skool.com/ia-masters-automations/calendar?eid=690b799f5d834
+ 453ba3f1ac358b5ba47
+LOCATION:https://us06web.zoom.us/j/84145991515?pwd=xv27zpAXfb5E1SdNLMr7q6B9
+ mrq8op.1
+END:VEVENT
+BEGIN:VEVENT
+UID:625c253dbcc3403396cecaac7976ce64-1778173200@skool.ia-masters-automation
+ s
+DTSTAMP:20260520T192417Z
+DTSTART:20260507T170000Z
+DTEND:20260507T190000Z
+SUMMARY:🎨 Taller de IA
+DESCRIPTION:✅ Construimos juntos\, paso a paso\, herramientas con IA que 
+ puedes aplicar desde el primer día. Sin código complicado y sin teoría 
+ de más.\n\n🗣️ Alejandro Romero\n🔓 Código: 292717\nEnlace: https:
+ //us06web.zoom.us/j/85358106562?pwd=6azhMcfYIX7L7KNynLmFfrQTOwm7In.1
+URL:https://www.skool.com/ia-masters-automations/calendar?eid=625c253dbcc34
+ 03396cecaac7976ce64
+LOCATION:https://us06web.zoom.us/j/85358106562?pwd=6azhMcfYIX7L7KNynLmFfrQT
+ Owm7In.1
+END:VEVENT
+BEGIN:VEVENT
+UID:ec79f4b85e7048da9929bd242d1a450d-1778518800@skool.ia-masters-automation
+ s
+DTSTAMP:20260520T192417Z
+DTSTART:20260511T170000Z
+DTEND:20260511T183000Z
+SUMMARY:☕️ Cafe Camaleónico
+DESCRIPTION:🗣️ Angel Aparicio\n🔥 El lunes que te hace avanzar. Cada
+  semana\, una hora para aprender\, compartir y aplicar IA real con otros q
+ ue están en el mismo camino.\n\nCódigo de acceso: 547852\nEnlace: https:
+ //us06web.zoom.us/j/88384837784?pwd=l7c6NV7Kh1wqFkGJiBVMRLWmjKynXG.1
+URL:https://www.skool.com/ia-masters-automations/calendar?eid=ec79f4b85e704
+ 8da9929bd242d1a450d
+LOCATION:https://us06web.zoom.us/j/88384837784?pwd=l7c6NV7Kh1wqFkGJiBVMRLWm
+ jKynXG.1
+END:VEVENT
+BEGIN:VEVENT
+UID:fe47ff78d3ee4f18a46dca7c1ac9a5af-1778605200@skool.ia-masters-automation
+ s
+DTSTAMP:20260520T192417Z
+DTSTART:20260512T170000Z
+DTEND:20260512T183000Z
+SUMMARY:🤝 Gestión de Negocios
+DESCRIPTION:🗣️ Alfonso Bello\n🔥 Gestión de negocio sin filtros. Co
+ n Alfonso: estrategia\, decisiones y operativa real para que tu negocio fu
+ ncione con o sin ti.\n\nCódigo: 562774\nEnlace: https://us06web.zoom.us/j
+ /88970065612?pwd=PdQvid4kXsUSMAOzbYnCd1T6dq153v.1
+URL:https://www.skool.com/ia-masters-automations/calendar?eid=fe47ff78d3ee4
+ f18a46dca7c1ac9a5af
+LOCATION:https://us06web.zoom.us/j/88970065612?pwd=PdQvid4kXsUSMAOzbYnCd1T6
+ dq153v.1
+END:VEVENT
+BEGIN:VEVENT
+UID:690b799f5d834453ba3f1ac358b5ba47-1778691600@skool.ia-masters-automation
+ s
+DTSTAMP:20260520T192417Z
+DTSTART:20260513T170000Z
+DTEND:20260513T183000Z
+SUMMARY:🦾 Forja de Camaleones
+DESCRIPTION:✅ Donde forjamos en grupo lo que cuesta construir solo.\n\n
+ 🗣️ Luis Salgado\n🔥 Desarrollos prácticos en directo\n\nCódigo de
+  acceso: 924755\nEnlace: https://us06web.zoom.us/j/84145991515?pwd=xv27zpA
+ Xfb5E1SdNLMr7q6B9mrq8op.1
+URL:https://www.skool.com/ia-masters-automations/calendar?eid=690b799f5d834
+ 453ba3f1ac358b5ba47
+LOCATION:https://us06web.zoom.us/j/84145991515?pwd=xv27zpAXfb5E1SdNLMr7q6B9
+ mrq8op.1
+END:VEVENT
+BEGIN:VEVENT
+UID:625c253dbcc3403396cecaac7976ce64-1778778000@skool.ia-masters-automation
+ s
+DTSTAMP:20260520T192417Z
+DTSTART:20260514T170000Z
+DTEND:20260514T190000Z
+SUMMARY:🎨 Taller de IA
+DESCRIPTION:✅ Construimos juntos\, paso a paso\, herramientas con IA que 
+ puedes aplicar desde el primer día. Sin código complicado y sin teoría 
+ de más.\n\n🗣️ Alejandro Romero\n🔓 Código: 292717\nEnlace: https:
+ //us06web.zoom.us/j/85358106562?pwd=6azhMcfYIX7L7KNynLmFfrQTOwm7In.1
+URL:https://www.skool.com/ia-masters-automations/calendar?eid=625c253dbcc34
+ 03396cecaac7976ce64
+LOCATION:https://us06web.zoom.us/j/85358106562?pwd=6azhMcfYIX7L7KNynLmFfrQT
+ Owm7In.1
+END:VEVENT
+BEGIN:VEVENT
+UID:ec79f4b85e7048da9929bd242d1a450d-1779123600@skool.ia-masters-automation
+ s
+DTSTAMP:20260520T192417Z
+DTSTART:20260518T170000Z
+DTEND:20260518T183000Z
+SUMMARY:☕️ Cafe Camaleónico
+DESCRIPTION:🗣️ Angel Aparicio\n🔥 El lunes que te hace avanzar. Cada
+  semana\, una hora para aprender\, compartir y aplicar IA real con otros q
+ ue están en el mismo camino.\n\nCódigo de acceso: 547852\nEnlace: https:
+ //us06web.zoom.us/j/88384837784?pwd=l7c6NV7Kh1wqFkGJiBVMRLWmjKynXG.1
+URL:https://www.skool.com/ia-masters-automations/calendar?eid=ec79f4b85e704
+ 8da9929bd242d1a450d
+LOCATION:https://us06web.zoom.us/j/88384837784?pwd=l7c6NV7Kh1wqFkGJiBVMRLWm
+ jKynXG.1
+END:VEVENT
+BEGIN:VEVENT
+UID:fe47ff78d3ee4f18a46dca7c1ac9a5af-1779210000@skool.ia-masters-automation
+ s
+DTSTAMP:20260520T192417Z
+DTSTART:20260519T170000Z
+DTEND:20260519T183000Z
+SUMMARY:🤝 Gestión de Negocios
+DESCRIPTION:🗣️ Alfonso Bello\n🔥 Gestión de negocio sin filtros. Co
+ n Alfonso: estrategia\, decisiones y operativa real para que tu negocio fu
+ ncione con o sin ti.\n\nCódigo: 562774\nEnlace: https://us06web.zoom.us/j
+ /88970065612?pwd=PdQvid4kXsUSMAOzbYnCd1T6dq153v.1
+URL:https://www.skool.com/ia-masters-automations/calendar?eid=fe47ff78d3ee4
+ f18a46dca7c1ac9a5af
+LOCATION:https://us06web.zoom.us/j/88970065612?pwd=PdQvid4kXsUSMAOzbYnCd1T6
+ dq153v.1
+END:VEVENT
+BEGIN:VEVENT
+UID:4a902ede796d428f9e1087237617fd6c-@skool.ia-masters-automations
+DTSTAMP:20260520T192417Z
+DTSTART:20260520T170000Z
+DTEND:20260520T180000Z
+SUMMARY:🦾 Forja de Camaleones
+DESCRIPTION:✅ Donde forjamos en grupo lo que cuesta construir solo.\n\n
+ 🗣️ Luis Salgado\n🔥 Desarrollos prácticos en directo\n\nCódigo de
+  acceso: 924755\nEnlace: https://us06web.zoom.us/j/84145991515?pwd=xv27zpA
+ Xfb5E1SdNLMr7q6B9mrq8op.1
+URL:https://www.skool.com/ia-masters-automations/calendar?eid=4a902ede796d4
+ 28f9e1087237617fd6c
+LOCATION:https://us06web.zoom.us/j/84145991515?pwd=xv27zpAXfb5E1SdNLMr7q6B9
+ mrq8op.1
+END:VEVENT
+BEGIN:VEVENT
+UID:98066ef0ac19426596c8b0c1b6d3049d-1779300000@skool.ia-masters-automation
+ s
+DTSTAMP:20260520T192417Z
+DTSTART:20260520T180000Z
+DTEND:20260520T193000Z
+SUMMARY:📊 Clínica de Marketing y Ads
+DESCRIPTION:✅ Marketing y anuncios: Consultoria y estrategia de marketing
+  y publicidad\n\n🗣️ Miguel RMS\nEnlace: https://meet.google.com/oxf-v
+ wqi-mtm
+URL:https://www.skool.com/ia-masters-automations/calendar?eid=98066ef0ac194
+ 26596c8b0c1b6d3049d
+LOCATION:https://meet.google.com/oxf-vwqi-mtm
+END:VEVENT
+BEGIN:VEVENT
+UID:625c253dbcc3403396cecaac7976ce64-1779382800@skool.ia-masters-automation
+ s
+DTSTAMP:20260520T192417Z
+DTSTART:20260521T170000Z
+DTEND:20260521T190000Z
+SUMMARY:🎨 Taller de IA
+DESCRIPTION:✅ Construimos juntos\, paso a paso\, herramientas con IA que 
+ puedes aplicar desde el primer día. Sin código complicado y sin teoría 
+ de más.\n\n🗣️ Alejandro Romero\n🔓 Código: 292717\nEnlace: https:
+ //us06web.zoom.us/j/85358106562?pwd=6azhMcfYIX7L7KNynLmFfrQTOwm7In.1
+URL:https://www.skool.com/ia-masters-automations/calendar?eid=625c253dbcc34
+ 03396cecaac7976ce64
+LOCATION:https://us06web.zoom.us/j/85358106562?pwd=6azhMcfYIX7L7KNynLmFfrQT
+ Owm7In.1
+END:VEVENT
+BEGIN:VEVENT
+UID:b856d9996acb444fa3875b3bf37a0105-@skool.ia-masters-automations
+DTSTAMP:20260520T192417Z
+DTSTART:20260522T160000Z
+DTEND:20260522T180000Z
+SUMMARY:Onboarding Nuevos Camaleones
+DESCRIPTION:En esta sesión haremos el onboarding oficial para todos los nu
+ evos miembros de la comunidad. Veremos cómo está estructurada la platafo
+ rma\, dónde encontrar cada recurso\, qué ruta seguir según vuestro perf
+ il y resolveremos todas las dudas en directo para que podáis empezar con 
+ claridad desde el día 1.
+URL:https://www.skool.com/ia-masters-automations/calendar?eid=b856d9996acb4
+ 44fa3875b3bf37a0105
+LOCATION:jDLvV6n2KKx
+END:VEVENT
+BEGIN:VEVENT
+UID:ec79f4b85e7048da9929bd242d1a450d-1779728400@skool.ia-masters-automation
+ s
+DTSTAMP:20260520T192417Z
+DTSTART:20260525T170000Z
+DTEND:20260525T183000Z
+SUMMARY:☕️ Cafe Camaleónico
+DESCRIPTION:🗣️ Angel Aparicio\n🔥 El lunes que te hace avanzar. Cada
+  semana\, una hora para aprender\, compartir y aplicar IA real con otros q
+ ue están en el mismo camino.\n\nCódigo de acceso: 547852\nEnlace: https:
+ //us06web.zoom.us/j/88384837784?pwd=l7c6NV7Kh1wqFkGJiBVMRLWmjKynXG.1
+URL:https://www.skool.com/ia-masters-automations/calendar?eid=ec79f4b85e704
+ 8da9929bd242d1a450d
+LOCATION:https://us06web.zoom.us/j/88384837784?pwd=l7c6NV7Kh1wqFkGJiBVMRLWm
+ jKynXG.1
+END:VEVENT
+BEGIN:VEVENT
+UID:fe47ff78d3ee4f18a46dca7c1ac9a5af-1779814800@skool.ia-masters-automation
+ s
+DTSTAMP:20260520T192417Z
+DTSTART:20260526T170000Z
+DTEND:20260526T183000Z
+SUMMARY:🤝 Gestión de Negocios
+DESCRIPTION:🗣️ Alfonso Bello\n🔥 Gestión de negocio sin filtros. Co
+ n Alfonso: estrategia\, decisiones y operativa real para que tu negocio fu
+ ncione con o sin ti.\n\nCódigo: 562774\nEnlace: https://us06web.zoom.us/j
+ /88970065612?pwd=PdQvid4kXsUSMAOzbYnCd1T6dq153v.1
+URL:https://www.skool.com/ia-masters-automations/calendar?eid=fe47ff78d3ee4
+ f18a46dca7c1ac9a5af
+LOCATION:https://us06web.zoom.us/j/88970065612?pwd=PdQvid4kXsUSMAOzbYnCd1T6
+ dq153v.1
+END:VEVENT
+BEGIN:VEVENT
+UID:920b52c25659469e8c76aaa33b5cad75-1779897600@skool.ia-masters-automation
+ s
+DTSTAMP:20260520T192417Z
+DTSTART:20260527T160000Z
+DTEND:20260527T180000Z
+SUMMARY:🦾 Forja de Camaleones
+DESCRIPTION:✅ Donde forjamos en grupo lo que cuesta construir solo.\n\n
+ 🗣️ Luis Salgado\n🔥 Desarrollos prácticos en directo\n\nCódigo de
+  acceso: 924755\nEnlace: https://us06web.zoom.us/j/84145991515?pwd=xv27zpA
+ Xfb5E1SdNLMr7q6B9mrq8op.1
+URL:https://www.skool.com/ia-masters-automations/calendar?eid=920b52c256594
+ 69e8c76aaa33b5cad75
+LOCATION:https://us06web.zoom.us/j/84145991515?pwd=xv27zpAXfb5E1SdNLMr7q6B9
+ mrq8op.1
+END:VEVENT
+BEGIN:VEVENT
+UID:d181756658484902be542dd75a4340e4-1779904800@skool.ia-masters-automation
+ s
+DTSTAMP:20260520T192417Z
+DTSTART:20260527T180000Z
+DTEND:20260527T193000Z
+SUMMARY:📊 Clínica de Marketing y Ads
+DESCRIPTION:✅ Marketing y anuncios: Consultoria y estrategia de marketing
+  y publicidad\n\n🗣️ Miguel RMS
+URL:https://www.skool.com/ia-masters-automations/calendar?eid=d181756658484
+ 902be542dd75a4340e4
+END:VEVENT
+BEGIN:VEVENT
+UID:625c253dbcc3403396cecaac7976ce64-1779987600@skool.ia-masters-automation
+ s
+DTSTAMP:20260520T192417Z
+DTSTART:20260528T170000Z
+DTEND:20260528T190000Z
+SUMMARY:🎨 Taller de IA
+DESCRIPTION:✅ Construimos juntos\, paso a paso\, herramientas con IA que 
+ puedes aplicar desde el primer día. Sin código complicado y sin teoría 
+ de más.\n\n🗣️ Alejandro Romero\n🔓 Código: 292717\nEnlace: https:
+ //us06web.zoom.us/j/85358106562?pwd=6azhMcfYIX7L7KNynLmFfrQTOwm7In.1
+URL:https://www.skool.com/ia-masters-automations/calendar?eid=625c253dbcc34
+ 03396cecaac7976ce64
+LOCATION:https://us06web.zoom.us/j/85358106562?pwd=6azhMcfYIX7L7KNynLmFfrQT
+ Owm7In.1
+END:VEVENT
+BEGIN:VEVENT
+UID:ec79f4b85e7048da9929bd242d1a450d-1780333200@skool.ia-masters-automation
+ s
+DTSTAMP:20260520T192417Z
+DTSTART:20260601T170000Z
+DTEND:20260601T183000Z
+SUMMARY:☕️ Cafe Camaleónico
+DESCRIPTION:🗣️ Angel Aparicio\n🔥 El lunes que te hace avanzar. Cada
+  semana\, una hora para aprender\, compartir y aplicar IA real con otros q
+ ue están en el mismo camino.\n\nCódigo de acceso: 547852\nEnlace: https:
+ //us06web.zoom.us/j/88384837784?pwd=l7c6NV7Kh1wqFkGJiBVMRLWmjKynXG.1
+URL:https://www.skool.com/ia-masters-automations/calendar?eid=ec79f4b85e704
+ 8da9929bd242d1a450d
+LOCATION:https://us06web.zoom.us/j/88384837784?pwd=l7c6NV7Kh1wqFkGJiBVMRLWm
+ jKynXG.1
+END:VEVENT
+BEGIN:VEVENT
+UID:fe47ff78d3ee4f18a46dca7c1ac9a5af-1780419600@skool.ia-masters-automation
+ s
+DTSTAMP:20260520T192417Z
+DTSTART:20260602T170000Z
+DTEND:20260602T183000Z
+SUMMARY:🤝 Gestión de Negocios
+DESCRIPTION:🗣️ Alfonso Bello\n🔥 Gestión de negocio sin filtros. Co
+ n Alfonso: estrategia\, decisiones y operativa real para que tu negocio fu
+ ncione con o sin ti.\n\nCódigo: 562774\nEnlace: https://us06web.zoom.us/j
+ /88970065612?pwd=PdQvid4kXsUSMAOzbYnCd1T6dq153v.1
+URL:https://www.skool.com/ia-masters-automations/calendar?eid=fe47ff78d3ee4
+ f18a46dca7c1ac9a5af
+LOCATION:https://us06web.zoom.us/j/88970065612?pwd=PdQvid4kXsUSMAOzbYnCd1T6
+ dq153v.1
+END:VEVENT
+BEGIN:VEVENT
+UID:920b52c25659469e8c76aaa33b5cad75-1780502400@skool.ia-masters-automation
+ s
+DTSTAMP:20260520T192417Z
+DTSTART:20260603T160000Z
+DTEND:20260603T180000Z
+SUMMARY:🦾 Forja de Camaleones
+DESCRIPTION:✅ Donde forjamos en grupo lo que cuesta construir solo.\n\n
+ 🗣️ Luis Salgado\n🔥 Desarrollos prácticos en directo\n\nCódigo de
+  acceso: 924755\nEnlace: https://us06web.zoom.us/j/84145991515?pwd=xv27zpA
+ Xfb5E1SdNLMr7q6B9mrq8op.1
+URL:https://www.skool.com/ia-masters-automations/calendar?eid=920b52c256594
+ 69e8c76aaa33b5cad75
+LOCATION:https://us06web.zoom.us/j/84145991515?pwd=xv27zpAXfb5E1SdNLMr7q6B9
+ mrq8op.1
+END:VEVENT
+BEGIN:VEVENT
+UID:d181756658484902be542dd75a4340e4-1780509600@skool.ia-masters-automation
+ s
+DTSTAMP:20260520T192417Z
+DTSTART:20260603T180000Z
+DTEND:20260603T193000Z
+SUMMARY:📊 Clínica de Marketing y Ads
+DESCRIPTION:✅ Marketing y anuncios: Consultoria y estrategia de marketing
+  y publicidad\n\n🗣️ Miguel RMS
+URL:https://www.skool.com/ia-masters-automations/calendar?eid=d181756658484
+ 902be542dd75a4340e4
+END:VEVENT
+BEGIN:VEVENT
+UID:625c253dbcc3403396cecaac7976ce64-1780592400@skool.ia-masters-automation
+ s
+DTSTAMP:20260520T192417Z
+DTSTART:20260604T170000Z
+DTEND:20260604T190000Z
+SUMMARY:🎨 Taller de IA
+DESCRIPTION:✅ Construimos juntos\, paso a paso\, herramientas con IA que 
+ puedes aplicar desde el primer día. Sin código complicado y sin teoría 
+ de más.\n\n🗣️ Alejandro Romero\n🔓 Código: 292717\nEnlace: https:
+ //us06web.zoom.us/j/85358106562?pwd=6azhMcfYIX7L7KNynLmFfrQTOwm7In.1
+URL:https://www.skool.com/ia-masters-automations/calendar?eid=625c253dbcc34
+ 03396cecaac7976ce64
+LOCATION:https://us06web.zoom.us/j/85358106562?pwd=6azhMcfYIX7L7KNynLmFfrQT
+ Owm7In.1
+END:VEVENT
 END:VCALENDAR
