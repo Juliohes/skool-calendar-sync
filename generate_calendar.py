@@ -1,6 +1,6 @@
 """
-Skool → Google Calendar iCal Sync
-Genera un feed .ics público desde el calendario de Skool (IA Masters Academy)
+Skool -> Google Calendar iCal Sync
+Genera un feed .ics publico desde el calendario de Skool (IA Masters Academy)
 Compatible con Google Calendar, Apple Calendar, Outlook.
 """
 
@@ -11,43 +11,83 @@ from datetime import datetime, timezone, timedelta
 import urllib.request
 import urllib.error
 
-# ─── Configuración ────────────────────────────────────────────────────────────
+# --- Configuracion -----------------------------------------------------------
 GROUP_SLUG      = "ia-masters-automations"
 CALENDAR_NAME   = "IA Masters Academy"
-CALENDAR_DESC   = "Eventos sincronizados automáticamente desde Skool"
+CALENDAR_DESC   = "Eventos sincronizados automaticamente desde Skool"
 OUTPUT_FILE     = "docs/calendar.ics"
 MONTHS_AHEAD    = 6
 MONTHS_BACK     = 1
 SKOOL_BASE_URL  = "https://www.skool.com"
-REQUEST_TIMEOUT = 15
+REQUEST_TIMEOUT = 20
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 log = logging.getLogger(__name__)
 
 HEADERS = {
-    "User-Agent": "Mozilla/5.0 (compatible; SkoolCalSync/1.0)",
-    "Accept": "application/json, text/html",
+    "User-Agent": (
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+        "AppleWebKit/537.36 (KHTML, like Gecko) "
+        "Chrome/124.0.0.0 Safari/537.36"
+    ),
+    "Accept": "text/html,application/xhtml+xml,application/json,*/*",
+    "Accept-Language": "es-ES,es;q=0.9,en;q=0.8",
 }
 
-def fetch_json(url):
-    req = urllib.request.Request(url, headers=HEADERS)
-    with urllib.request.urlopen(req, timeout=REQUEST_TIMEOUT) as resp:
-        return json.loads(resp.read().decode("utf-8"))
+# --- Utilidades HTTP ---------------------------------------------------------
 
-def fetch_html(url):
+def fetch_text(url):
     req = urllib.request.Request(url, headers=HEADERS)
     with urllib.request.urlopen(req, timeout=REQUEST_TIMEOUT) as resp:
         return resp.read().decode("utf-8")
 
+def fetch_json(url):
+    req = urllib.request.Request(url, headers={**HEADERS, "Accept": "application/json"})
+    with urllib.request.urlopen(req, timeout=REQUEST_TIMEOUT) as resp:
+        return json.loads(resp.read().decode("utf-8"))
+
+# --- Obtener el buildId de Next.js -------------------------------------------
+
 def get_build_id():
-    log.info("Obteniendo buildId de Skool...")
-    html = fetch_html(SKOOL_BASE_URL)
-    match = re.search(r'"buildId"\s*:\s*"([^"]+)"', html)
-    if not match:
-        raise RuntimeError("No se encontro buildId en la pagina de Skool")
-    build_id = match.group(1)
-    log.info(f"BuildId: {build_id}")
-    return build_id
+    """
+    Extrae el buildId de Next.js probando varias paginas de Skool.
+    El buildId cambia con cada deploy de Skool.
+    """
+    urls_to_try = [
+        f"{SKOOL_BASE_URL}/{GROUP_SLUG}/calendar",
+        f"{SKOOL_BASE_URL}/{GROUP_SLUG}",
+        SKOOL_BASE_URL,
+    ]
+
+    for url in urls_to_try:
+        log.info(f"Buscando buildId en: {url}")
+        try:
+            html = fetch_text(url)
+            # Patron principal
+            match = re.search(r'"buildId"\s*:\s*"([^"]+)"', html)
+            if match:
+                build_id = match.group(1)
+                log.info(f"BuildId encontrado: {build_id}")
+                return build_id
+            # Patron alternativo en __NEXT_DATA__
+            match2 = re.search(r'__NEXT_DATA__[^{]*({[^<]+})', html)
+            if match2:
+                data = json.loads(match2.group(1))
+                build_id = data.get("buildId")
+                if build_id:
+                    log.info(f"BuildId encontrado via __NEXT_DATA__: {build_id}")
+                    return build_id
+        except Exception as e:
+            log.warning(f"Fallo en {url}: {e}")
+            continue
+
+    raise RuntimeError(
+        "No se pudo obtener el buildId de Skool. "
+        "Es posible que Skool este bloqueando el acceso desde GitHub Actions. "
+        "Consulta el README para configurar una cookie de sesion."
+    )
+
+# --- Obtener eventos del calendario ------------------------------------------
 
 def get_events_for_timestamp(build_id, cal_date):
     url = (
@@ -60,6 +100,9 @@ def get_events_for_timestamp(build_id, cal_date):
         return data.get("pageProps", {}).get("events", [])
     except urllib.error.HTTPError as e:
         log.warning(f"HTTP {e.code} para calDate={cal_date}: {e.reason}")
+        return []
+    except Exception as e:
+        log.warning(f"Error para calDate={cal_date}: {e}")
         return []
 
 def get_all_events(build_id):
@@ -86,6 +129,8 @@ def get_all_events(build_id):
     log.info(f"Total eventos unicos obtenidos: {len(all_events)}")
     return all_events
 
+# --- Parsear ubicacion -------------------------------------------------------
+
 def parse_location(location_str):
     if not location_str:
         return ""
@@ -96,6 +141,8 @@ def parse_location(location_str):
     except (json.JSONDecodeError, TypeError):
         return str(location_str)
 
+# --- Formatear fechas para iCal ----------------------------------------------
+
 def to_ical_dt(iso_str):
     dt = datetime.fromisoformat(iso_str)
     dt_utc = dt.astimezone(timezone.utc)
@@ -103,6 +150,8 @@ def to_ical_dt(iso_str):
 
 def now_ical():
     return datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+
+# --- Escapar y formatear texto iCal ------------------------------------------
 
 def ical_escape(text):
     if not text:
@@ -114,6 +163,7 @@ def ical_escape(text):
     return text
 
 def ical_fold(line):
+    """RFC 5545 line folding: maximo 75 octetos por linea."""
     result = []
     encoded = line.encode("utf-8")
     while len(encoded) > 75:
@@ -124,6 +174,8 @@ def ical_fold(line):
         encoded = b" " + encoded[cut:]
     result.append(encoded.decode("utf-8"))
     return "\r\n".join(result)
+
+# --- Generar iCal ------------------------------------------------------------
 
 def generate_ical(events):
     lines = [
@@ -182,6 +234,8 @@ def generate_ical(events):
 
     lines.append("END:VCALENDAR")
     return "\r\n".join(lines) + "\r\n"
+
+# --- Main --------------------------------------------------------------------
 
 def main():
     import os
