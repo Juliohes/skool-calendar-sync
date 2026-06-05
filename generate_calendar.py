@@ -163,7 +163,7 @@ def events_to_ics(events, group_slug):
             dtend = dtstart
         
         lines.append("BEGIN:VEVENT")
-        lines.append("UID:{}@skool.com".format(event_id))
+        lines.append("UID:{}_{}@skool.com".format(event_id, dtstart))
         lines.append("DTSTART:{}".format(dtstart))
         lines.append("DTEND:{}".format(dtend))
         lines.append("SUMMARY:{}".format(escape_ical(title)))
@@ -201,7 +201,7 @@ def main():
         year_num = now.year + total_months // 12
         events = fetch_events_for_month(build_id, COOKIE, year_num, month_num)
         for ev in events:
-            ev_id = ev.get("id", "")
+            ev_id = ev.get("id", "") + "_" + ev.get("startTime", "")
             if ev_id not in all_events:
                 all_events[ev_id] = ev
 
