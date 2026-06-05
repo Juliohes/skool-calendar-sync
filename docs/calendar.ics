@@ -1,10 +1,56 @@
 BEGIN:VCALENDAR
 VERSION:2.0
-PRODID:-//SkoolCalendarSync//EN
-X-WR-CALNAME:IA Masters Academy
-X-WR-CALDESC:Eventos sincronizados automaticamente desde Skool
+PRODID:-//Skool Calendar Sync//EN
 CALSCALE:GREGORIAN
 METHOD:PUBLISH
+X-WR-CALNAME:Skool: ia-masters-automations
 X-WR-TIMEZONE:UTC
-LAST-MODIFIED:20260605T084548Z
+BEGIN:VEVENT
+UID:b856d9996acb444fa3875b3bf37a0105@skool.com
+DTSTART:20260525T160000Z
+DTEND:20260525T170000Z
+SUMMARY:Onboarding Nuevos Camaleones
+DESCRIPTION:En esta sesión haremos el onboarding oficial para todos los nuevos miembros de la comunidad. Veremos cómo está estructurada la plataforma\, dónde encontrar cada recurso\, qué ruta seguir según vuestro perfil y resolveremos todas las dudas en directo para que podáis empezar con claridad desde el día 1.
+URL:https://www.skool.com/ia-masters-automations/calendar
+END:VEVENT
+BEGIN:VEVENT
+UID:ec79f4b85e7048da9929bd242d1a450d@skool.com
+DTSTART:20260525T170000Z
+DTEND:20260525T183000Z
+SUMMARY:☕️ Cafe Camaleónico
+DESCRIPTION:🗣️ Angel Aparicio\n🔥 El lunes que te hace avanzar. Cada semana\, una hora para aprender\, compartir y aplicar IA real con otros que están en el mismo camino.\n\nCódigo de acceso: 547852
+URL:https://www.skool.com/ia-masters-automations/calendar
+END:VEVENT
+BEGIN:VEVENT
+UID:fe47ff78d3ee4f18a46dca7c1ac9a5af@skool.com
+DTSTART:20260526T170000Z
+DTEND:20260526T183000Z
+SUMMARY:🤝 Gestión de Negocios
+DESCRIPTION:🗣️ Alfonso Bello\n🔥 Gestión de negocio sin filtros. Con Alfonso: estrategia\, decisiones y operativa real para que tu negocio funcione con o sin ti.\n\nCódigo: 562774
+URL:https://www.skool.com/ia-masters-automations/calendar
+END:VEVENT
+BEGIN:VEVENT
+UID:920b52c25659469e8c76aaa33b5cad75@skool.com
+DTSTART:20260527T160000Z
+DTEND:20260527T180000Z
+SUMMARY:🦾 Forja de Camaleones
+DESCRIPTION:✅ Donde forjamos en grupo lo que cuesta construir solo.\n\n🗣️ Luis Salgado\n🔥 Desarrollos prácticos en directo\n\nCódigo de acceso: 924755
+URL:https://www.skool.com/ia-masters-automations/calendar
+END:VEVENT
+BEGIN:VEVENT
+UID:c7e3163e5bb544748e24852acd14dc46@skool.com
+DTSTART:20260527T180000Z
+DTEND:20260527T193000Z
+SUMMARY:📊 Clínica de Marketing y Ads
+DESCRIPTION:✅ Marketing y anuncios: Consultoria y estrategia de marketing y publicidad\n\n🗣️ Miguel RMS
+URL:https://www.skool.com/ia-masters-automations/calendar
+END:VEVENT
+BEGIN:VEVENT
+UID:625c253dbcc3403396cecaac7976ce64@skool.com
+DTSTART:20260528T170000Z
+DTEND:20260528T190000Z
+SUMMARY:🎨 Taller de IA
+DESCRIPTION:✅ Construimos juntos\, paso a paso\, herramientas con IA que puedes aplicar desde el primer día. Sin código complicado y sin teoría de más.\n\n🗣️ Alejandro Romero\n🔓 Código: 292717
+URL:https://www.skool.com/ia-masters-automations/calendar
+END:VEVENT
 END:VCALENDAR
