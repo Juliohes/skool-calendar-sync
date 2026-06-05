@@ -6,10 +6,14 @@ Compatible con Google Calendar, Apple Calendar, Outlook.
 Configuracion:
     SKOOL_COOKIE: variable de entorno con las cookies de sesion de Skool.
     Formato: auth_token=<jwt>; aws-waf-token=<token>; AWSALB=<valor>; AWSALBCORS=<valor>
+
+NOTA: Si el script falla con 403 Forbidden, la SKOOL_COOKIE ha expirado.
+      Renuevala en Settings > Secrets > SKOOL_COOKIE del repo.
 """
 
 import os
 import re
+import sys
 import json
 import logging
 from datetime import datetime, timezone, timedelta
@@ -40,10 +44,15 @@ def make_headers(extra=None):
             "AppleWebKit/537.36 (KHTML, like Gecko) "
             "Chrome/124.0.0.0 Safari/537.36"
         ),
-        "Accept": "application/json, text/html, */*",
-        "Accept-Language": "es-ES,es;q=0.9,en;q=0.8",
-        "Referer": f"{SKOOL_BASE_URL}/{GROUP_SLUG}/calendar",
-        "Origin": SKOOL_BASE_URL,
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+        "Accept-Language": "es-ES,es;q=0.9,en-US;q=0.8,en;q=0.7",
+        "Accept-Encoding": "gzip, deflate, br",
+        "Connection": "keep-alive",
+        "Upgrade-Insecure-Requests": "1",
+        "Sec-Fetch-Dest": "document",
+        "Sec-Fetch-Mode": "navigate",
+        "Sec-Fetch-Site": "none",
+        "Cache-Control": "max-age=0",
     }
     if SKOOL_COOKIE:
         headers["Cookie"] = SKOOL_COOKIE
@@ -51,58 +60,54 @@ def make_headers(extra=None):
         headers.update(extra)
     return headers
 
-def fetch_text(url):
-    req = urllib.request.Request(url, headers=make_headers())
-    with urllib.request.urlopen(req, timeout=REQUEST_TIMEOUT) as resp:
-        return resp.read().decode("utf-8")
+def fetch_url(url, json_response=False, extra_headers=None):
+    """Peticion HTTP. Devuelve (status_code, data)."""
+    h = make_headers(extra_headers)
+    if json_response:
+        h["Accept"] = "application/json"
+        h["x-requested-with"] = "XMLHttpRequest"
+    req = urllib.request.Request(url, headers=h)
+    try:
+        with urllib.request.urlopen(req, timeout=REQUEST_TIMEOUT) as resp:
+            raw = resp.read()
+            text = raw.decode("utf-8")
+            if json_response:
+                return 200, json.loads(text)
+            return 200, text
+    except urllib.error.HTTPError as e:
+        return e.code, str(e.reason)
+    except Exception as e:
+        return 0, str(e)
 
-def fetch_json(url, extra_headers=None):
-    req = urllib.request.Request(
-        url, headers=make_headers(extra_headers or {"Accept": "application/json"})
-    )
-    with urllib.request.urlopen(req, timeout=REQUEST_TIMEOUT) as resp:
-        return json.loads(resp.read().decode("utf-8"))
-
-# --- Obtener eventos via API REST de Skool -----------------------------------
+# --- Obtener eventos via API REST -------------------------------------------
 
 def get_events_via_api(cal_date):
-    """Usa la API REST interna de Skool. No requiere buildId."""
     url = (
         f"{SKOOL_BASE_URL}/api/calendar"
         f"?calDate={cal_date}&group={GROUP_SLUG}"
     )
-    log.info(f"Consultando API REST: {url}")
-    try:
-        data = fetch_json(url, {"Accept": "application/json", "x-requested-with": "XMLHttpRequest"})
+    log.info(f"API REST: {url}")
+    status, data = fetch_url(url, json_response=True)
+    if status == 200:
         if isinstance(data, list):
             return data
         return data.get("events", [])
-    except urllib.error.HTTPError as e:
-        log.warning(f"API REST HTTP {e.code} para calDate={cal_date}: {e.reason}")
-        return None
-    except Exception as e:
-        log.warning(f"Error en API REST para calDate={cal_date}: {e}")
-        return None
+    log.warning(f"API REST HTTP {status} para {cal_date}: {data}")
+    return None
 
 def get_events_via_nextjs(build_id, cal_date):
-    """Fallback: obtiene eventos via Next.js data endpoint."""
     url = (
         f"{SKOOL_BASE_URL}/_next/data/{build_id}"
         f"/{GROUP_SLUG}/calendar.json"
         f"?calDate={cal_date}&group={GROUP_SLUG}"
     )
-    try:
-        data = fetch_json(url)
+    status, data = fetch_url(url, json_response=True)
+    if status == 200:
         return data.get("pageProps", {}).get("events", [])
-    except urllib.error.HTTPError as e:
-        log.warning(f"NextJS HTTP {e.code} para calDate={cal_date}: {e.reason}")
-        return []
-    except Exception as e:
-        log.warning(f"Error NextJS para calDate={cal_date}: {e}")
-        return []
+    log.warning(f"NextJS HTTP {status} para {cal_date}: {data}")
+    return []
 
 def get_build_id():
-    """Obtiene el buildId de Next.js desde el HTML de Skool."""
     urls_to_try = [
         f"{SKOOL_BASE_URL}/{GROUP_SLUG}/calendar",
         f"{SKOOL_BASE_URL}/{GROUP_SLUG}",
@@ -110,35 +115,34 @@ def get_build_id():
     ]
     for url in urls_to_try:
         log.info(f"Buscando buildId en: {url}")
-        try:
-            html = fetch_text(url)
-            match = re.search(r'"buildId"\s*:\s*"([^"]+)"', html)
-            if match:
-                build_id = match.group(1)
-                log.info(f"BuildId encontrado: {build_id}")
-                return build_id
-            match2 = re.search(
-                r'<script[^>]+id=["\']__NEXT_DATA__["\'][^>]*>([^<]+)</script>',
-                html
-            )
-            if match2:
-                try:
-                    data = json.loads(match2.group(1))
-                    build_id = data.get("buildId")
-                    if build_id:
-                        log.info(f"BuildId via __NEXT_DATA__: {build_id}")
-                        return build_id
-                except json.JSONDecodeError:
-                    pass
-            match3 = re.search(r'/_next/static/([^/"]+)/_buildManifest', html)
-            if match3:
-                build_id = match3.group(1)
-                log.info(f"BuildId via buildManifest: {build_id}")
-                return build_id
-            log.warning(f"No se encontro buildId en {url}")
-        except Exception as e:
-            log.warning(f"Fallo al acceder a {url}: {e}")
+        status, html = fetch_url(url)
+        if status != 200:
+            log.warning(f"HTTP {status} en {url}: {html}")
             continue
+        # Patron 1: buildId directo
+        pat1 = re.search(r'"buildId"\s*:\s*"([^"]+)"', html)
+        if pat1:
+            build_id = pat1.group(1)
+            log.info(f"BuildId encontrado (pat1): {build_id}")
+            return build_id
+        # Patron 2: __NEXT_DATA__ script
+        pat2 = re.search(r'<script[^>]+id=["\']__NEXT_DATA__["\'\'][^>]*>([^<]+)</script>', html)
+        if pat2:
+            try:
+                data = json.loads(pat2.group(1))
+                build_id = data.get("buildId")
+                if build_id:
+                    log.info(f"BuildId via __NEXT_DATA__: {build_id}")
+                    return build_id
+            except json.JSONDecodeError:
+                pass
+        # Patron 3: buildManifest
+        pat3 = re.search(r'/_next/static/([^/"]+)/_buildManifest', html)
+        if pat3:
+            build_id = pat3.group(1)
+            log.info(f"BuildId via buildManifest: {build_id}")
+            return build_id
+        log.warning(f"No se encontro buildId en {url}")
     return None
 
 def get_all_events():
@@ -151,6 +155,7 @@ def get_all_events():
     # Estrategia 1: API REST directa
     log.info("Estrategia 1: API REST directa de Skool")
     api_works = True
+    forbidden_count = 0
     for month_offset in range(total_months + 1):
         target = start_date + timedelta(days=30 * month_offset)
         cal_date = target.strftime("%Y-%m-01")
@@ -158,6 +163,7 @@ def get_all_events():
         events = get_events_via_api(cal_date)
         if events is None:
             api_works = False
+            forbidden_count += 1
             break
         for ev in events:
             ev_id = ev.get("eventId") or ev.get("id") or str(ev)
@@ -170,16 +176,18 @@ def get_all_events():
         return all_events
 
     # Estrategia 2: buildId de Next.js
-    log.warning("API REST no disponible. Intentando con buildId de Next.js...")
+    log.warning("API REST no disponible. Intentando con buildId...")
     all_events = []
     seen_ids = set()
 
     build_id = get_build_id()
     if not build_id:
-        raise RuntimeError(
-            "No se pudo obtener eventos: ni la API REST de Skool ni el buildId "
-            "de Next.js funcionaron. Verifica que SKOOL_COOKIE sea valida."
-        )
+        log.error("ERROR: No se pudo conectar con Skool (HTTP 403 Forbidden).")
+        log.error("ACCION REQUERIDA: La SKOOL_COOKIE ha expirado.")
+        log.error("  1. Inicia sesion en https://www.skool.com")
+        log.error("  2. Copia las cookies de sesion desde las DevTools del navegador")
+        log.error("  3. Actualiza el Secret SKOOL_COOKIE en GitHub Settings > Secrets")
+        sys.exit(1)
 
     log.info(f"Usando buildId: {build_id}")
     for month_offset in range(total_months + 1):
@@ -209,7 +217,7 @@ def escape_ics(text):
     return text
 
 def fold_line(line):
-    """RFC 5545: lineas de max 75 octetos, con CRLF + espacio."""
+    """RFC 5545: lineas de max 75 octetos."""
     result = []
     while len(line.encode("utf-8")) > 75:
         chunk = line[:75]
