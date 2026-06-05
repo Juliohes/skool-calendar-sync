@@ -15,6 +15,7 @@ import os
 import re
 import sys
 import json
+import gzip
 import logging
 from datetime import datetime, timezone, timedelta
 import urllib.request
@@ -60,17 +61,24 @@ def make_headers(extra=None):
         headers.update(extra)
     return headers
 
+def decode_response(resp):
+    """Decodifica la respuesta HTTP, manejando gzip automaticamente."""
+    raw = resp.read()
+    encoding = resp.headers.get("Content-Encoding", "")
+    if encoding == "gzip" or (raw[:2] == b"\x1f\x8b"):
+        raw = gzip.decompress(raw)
+    return raw.decode("utf-8")
+
 def fetch_url(url, json_response=False, extra_headers=None):
     """Peticion HTTP. Devuelve (status_code, data)."""
     h = make_headers(extra_headers)
     if json_response:
-        h["Accept"] = "application/json"
+        h["Accept"] = "application/json, */*"
         h["x-requested-with"] = "XMLHttpRequest"
     req = urllib.request.Request(url, headers=h)
     try:
         with urllib.request.urlopen(req, timeout=REQUEST_TIMEOUT) as resp:
-            raw = resp.read()
-            text = raw.decode("utf-8")
+            text = decode_response(resp)
             if json_response:
                 return 200, json.loads(text)
             return 200, text
@@ -79,35 +87,13 @@ def fetch_url(url, json_response=False, extra_headers=None):
     except Exception as e:
         return 0, str(e)
 
-# --- Obtener eventos via API REST -------------------------------------------
-
-def get_events_via_api(cal_date):
-    url = (
-        f"{SKOOL_BASE_URL}/api/calendar"
-        f"?calDate={cal_date}&group={GROUP_SLUG}"
-    )
-    log.info(f"API REST: {url}")
-    status, data = fetch_url(url, json_response=True)
-    if status == 200:
-        if isinstance(data, list):
-            return data
-        return data.get("events", [])
-    log.warning(f"API REST HTTP {status} para {cal_date}: {data}")
-    return None
-
-def get_events_via_nextjs(build_id, cal_date):
-    url = (
-        f"{SKOOL_BASE_URL}/_next/data/{build_id}"
-        f"/{GROUP_SLUG}/calendar.json"
-        f"?calDate={cal_date}&group={GROUP_SLUG}"
-    )
-    status, data = fetch_url(url, json_response=True)
-    if status == 200:
-        return data.get("pageProps", {}).get("events", [])
-    log.warning(f"NextJS HTTP {status} para {cal_date}: {data}")
-    return []
+# --- Obtener buildId de Next.js ----------------------------------------------
 
 def get_build_id():
+    """
+    Obtiene el buildId buscando primero en la pagina del calendario del grupo,
+    luego en la pagina del grupo, y finalmente en la home de Skool.
+    """
     urls_to_try = [
         f"{SKOOL_BASE_URL}/{GROUP_SLUG}/calendar",
         f"{SKOOL_BASE_URL}/{GROUP_SLUG}",
@@ -118,82 +104,68 @@ def get_build_id():
         status, html = fetch_url(url)
         if status != 200:
             log.warning(f"HTTP {status} en {url}: {html}")
+            if status == 403:
+                log.warning("ADVERTENCIA: Cookie expirada (403). Renueva SKOOL_COOKIE.")
+                sys.exit(0)
             continue
+        # Patron 1: "buildId":"xxx" en el JSON inline
         pat1 = re.search(r'"buildId"\s*:\s*"([^"]+)"', html)
         if pat1:
             build_id = pat1.group(1)
-            log.info(f"BuildId encontrado: {build_id}")
+            log.info(f"BuildId encontrado en {url}: {build_id}")
             return build_id
+        # Patron 2: tag <script id="__NEXT_DATA__">
         pat2 = re.search(r'<script[^>]+id=["\']__NEXT_DATA__["\'][^>]*>([^<]+)</script>', html)
         if pat2:
             try:
                 data = json.loads(pat2.group(1))
                 build_id = data.get("buildId")
                 if build_id:
-                    log.info(f"BuildId via __NEXT_DATA__: {build_id}")
+                    log.info(f"BuildId via __NEXT_DATA__ en {url}: {build_id}")
                     return build_id
             except json.JSONDecodeError:
                 pass
+        # Patron 3: /_next/static/BUILD_ID/_buildManifest
         pat3 = re.search(r'/_next/static/([^/"]+)/_buildManifest', html)
         if pat3:
             build_id = pat3.group(1)
-            log.info(f"BuildId via buildManifest: {build_id}")
+            log.info(f"BuildId via buildManifest en {url}: {build_id}")
             return build_id
-        log.warning(f"No se encontro buildId en {url}")
+        log.warning(f"No se encontro buildId en {url} (html len={len(html)})")
     return None
 
-def get_all_events():
+# --- Obtener eventos ---------------------------------------------------------
+
+def get_events_for_month(build_id, cal_date):
+    """Obtiene eventos del calendario para un mes dado via Next.js data."""
+    url = (
+        f"{SKOOL_BASE_URL}/_next/data/{build_id}"
+        f"/{GROUP_SLUG}/calendar.json"
+        f"?calDate={cal_date}&group={GROUP_SLUG}"
+    )
+    status, data = fetch_url(url, json_response=True)
+    if status == 200:
+        events = data.get("pageProps", {}).get("events", [])
+        log.info(f"  {cal_date}: {len(events)} eventos")
+        return events
+    log.warning(f"  {cal_date}: HTTP {status} - {data}")
+    return []
+
+def get_all_events(build_id):
     now = datetime.now(timezone.utc)
     seen_ids = set()
     all_events = []
     total_months = MONTHS_BACK + MONTHS_AHEAD
     start_date = now - timedelta(days=30 * MONTHS_BACK)
-
-    # Estrategia 1: API REST directa
-    log.info("Estrategia 1: API REST directa de Skool")
-    api_works = True
     for month_offset in range(total_months + 1):
         target = start_date + timedelta(days=30 * month_offset)
         cal_date = target.strftime("%Y-%m-01")
-        log.info(f"Obteniendo eventos para: {cal_date}")
-        events = get_events_via_api(cal_date)
-        if events is None:
-            api_works = False
-            break
+        events = get_events_for_month(build_id, cal_date)
         for ev in events:
             ev_id = ev.get("eventId") or ev.get("id") or str(ev)
             if ev_id not in seen_ids:
                 seen_ids.add(ev_id)
                 all_events.append(ev)
-
-    if api_works:
-        log.info(f"API REST ok. Eventos: {len(all_events)}")
-        return all_events
-
-    # Estrategia 2: buildId de Next.js
-    log.warning("API REST no disponible. Intentando con buildId...")
-    all_events = []
-    seen_ids = set()
-
-    build_id = get_build_id()
-    if not build_id:
-        log.warning("ADVERTENCIA: No se pudo conectar con Skool (HTTP 403 Forbidden).")
-        log.warning("La SKOOL_COOKIE ha expirado. El ICS no se actualizara esta vez.")
-        log.warning("  -> Para renovar: Settings > Secrets > SKOOL_COOKIE en GitHub")
-        sys.exit(0)
-
-    log.info(f"Usando buildId: {build_id}")
-    for month_offset in range(total_months + 1):
-        target = start_date + timedelta(days=30 * month_offset)
-        cal_date = target.strftime("%Y-%m-01")
-        log.info(f"Obteniendo eventos (NextJS) para: {cal_date}")
-        events = get_events_via_nextjs(build_id, cal_date)
-        for ev in events:
-            ev_id = ev.get("eventId") or ev.get("id") or str(ev)
-            if ev_id not in seen_ids:
-                seen_ids.add(ev_id)
-                all_events.append(ev)
-
     return all_events
 
 # --- Generar ICS -------------------------------------------------------------
@@ -210,7 +182,7 @@ def escape_ics(text):
     return text
 
 def fold_line(line):
-    """RFC 5545: lineas de max 75 octetos."""
+    """RFC 5545: max 75 octetos por linea."""
     result = []
     while len(line.encode("utf-8")) > 75:
         chunk = line[:75]
@@ -233,8 +205,7 @@ def parse_skool_dt(dt_str):
 def format_dt_utc(dt):
     if dt.tzinfo is None:
         dt = dt.replace(tzinfo=timezone.utc)
-    dt_utc = dt.astimezone(timezone.utc)
-    return dt_utc.strftime("%Y%m%dT%H%M%SZ")
+    return dt.astimezone(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
 
 def event_to_vevent(ev):
     event_id = ev.get("eventId") or ev.get("id", "unknown")
@@ -263,8 +234,7 @@ def event_to_vevent(ev):
         lines.append(fold_line(f"DESCRIPTION:{escape_ics(description)}"))
     if location:
         lines.append(fold_line(f"LOCATION:{escape_ics(location)}"))
-    group_url = f"{SKOOL_BASE_URL}/{GROUP_SLUG}/calendar"
-    lines.append(fold_line(f"URL:{group_url}"))
+    lines.append(fold_line(f"URL:{SKOOL_BASE_URL}/{GROUP_SLUG}/calendar"))
     lines.append("END:VEVENT")
     return "\r\n".join(lines)
 
@@ -299,13 +269,22 @@ def main():
         log.warning("SKOOL_COOKIE no configurada - las peticiones pueden fallar")
     else:
         log.info("Cookie de sesion: configurada")
-    events = get_all_events()
-    log.info(f"Total de eventos encontrados: {len(events)}")
+
+    build_id = get_build_id()
+    if not build_id:
+        log.error("No se pudo obtener el buildId de Skool.")
+        log.error("Verifica que SKOOL_COOKIE sea valida en GitHub Secrets.")
+        sys.exit(1)
+
+    log.info(f"BuildId: {build_id}")
+    events = get_all_events(build_id)
+    log.info(f"Total de eventos: {len(events)}")
+
     ics_content = generate_ics(events)
     os.makedirs(os.path.dirname(OUTPUT_FILE), exist_ok=True)
     with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
         f.write(ics_content)
-    log.info(f"Archivo ICS guardado: {OUTPUT_FILE}")
+    log.info(f"ICS guardado: {OUTPUT_FILE}")
 
 if __name__ == "__main__":
     main()
